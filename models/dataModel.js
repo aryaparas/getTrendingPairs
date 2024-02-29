@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const DataSchema = new mongoose.Schema({
-  // Define your schema fields here
-  name: {
+ id: {
     type: String,
     required: true,
-  },
-  // Add more fields as needed
+ },
+ top_3_coins: [String]
+ // Add more fields as needed
 });
 
-module.exports = mongoose.model('Data', DataSchema);
+export default mongoose.model('Data', DataSchema);
