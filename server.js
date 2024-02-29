@@ -20,7 +20,7 @@ app.listen(port, () => {
 // connectDB();
 console.log(new Date().toLocaleString(),' :: Cron started');
 
-await cronData();
+// cronData();
 
 cron.schedule('*/30 * * * *', async () => {
     console.log(new Date().toLocaleString(),' :: Cron job started');

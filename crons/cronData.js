@@ -15,7 +15,7 @@ function sleep(ms) {
 
 const sendMessageToGroup = async (message) => {
     try {
-        message = JSON.stringify(message);
+        // message = JSON.stringify(message);
         await bot.sendMessage(groupChatId, message);
         console.log("message sent")
     } catch (error) {
@@ -49,7 +49,9 @@ export async function cronData () {
                         market_cap_change_24h: data[y].market_cap_change_24h,
                         market_cap_change_percentage_24h: data[y].market_cap_change_percentage_24h,
                     }
-                    await sendMessageToGroup(obj);
+
+                    let xx = "category: "+obj.category+"\nid: "+obj.id+"\nlink: "+obj.link+"\nsymbol: "+obj.symbol+"\nname: "+obj.name+"\ncurrent_price: "+obj.current_price+"\nmarket_cap: "+obj.market_cap+"\nfully_diluted_valuation: "+obj.fully_diluted_valuation+"\ntotal_volume: "+obj.total_volume+"\nhigh_24h: "+obj.high_24h+"\nlow_24h: "+obj.low_24h+"\nprice_change_24h: "+obj.price_change_24h+"\nprice_change_percentage_24h: "+obj.price_change_percentage_24h+"\nmarket_cap_change_24h: "+obj.market_cap_change_24h+"\nmarket_cap_change_percentage_24h: "+obj.market_cap_change_percentage_24h
+                    await sendMessageToGroup(xx);
                     await sleep(5000)
                 }
             } catch (error) {
