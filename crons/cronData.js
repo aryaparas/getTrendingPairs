@@ -28,16 +28,16 @@ async function updateOrInsert(obj) {
     try {
 
         const updateResult = await DataSchema.updateOne(
-            { id: obj.id }, // Find a document with the given id
+            { id: obj.id, category: obj.category }, // Find a document with the given id
             { $inc: { counter: 1 } } // Increment the counter by 1
         );
 
-        const counter = await DataSchema.find({ id: obj.id }, { _id: 0, counter: 1 });
+        const counter = await DataSchema.find({ id: obj.id, category: obj.category }, { _id: 0, counter: 1 });
 
         // If the document was not found (and thus not updated), insert it
         if (updateResult.modifiedCount === 0) {
             await DataSchema.updateOne(
-                { id: obj.id }, // Find a document with the given id
+                { id: obj.id, category: obj.category }, // Find a document with the given id
                 {
                     $set: obj, // Set the price
                 },
