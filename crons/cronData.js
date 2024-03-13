@@ -32,7 +32,7 @@ async function updateOrInsert(obj) {
             { $inc: { counter: 1 } } // Increment the counter by 1
         );
 
-        const counter = await DataSchema.find({ id }, { _id: 0, counter: 1 });
+        const counter = await DataSchema.find({ id: obj.id }, { _id: 0, counter: 1 });
 
         // If the document was not found (and thus not updated), insert it
         if (updateResult.modifiedCount === 0) {
@@ -81,7 +81,7 @@ export async function cronData() {
 
                     let xx = "category: " + obj.category + "\nid: " + obj.id + "\nlink: " + obj.link + "\nsymbol: " + obj.symbol + "\nname: " + obj.name + "\ncurrent_price: " + obj.current_price + "\nmarket_cap: " + obj.market_cap + "\nfully_diluted_valuation: " + obj.fully_diluted_valuation + "\ntotal_volume: " + obj.total_volume + "\nhigh_24h: " + obj.high_24h + "\nlow_24h: " + obj.low_24h + "\nprice_change_24h: " + obj.price_change_24h + "\nprice_change_percentage_24h: " + obj.price_change_percentage_24h + "\nmarket_cap_change_24h: " + obj.market_cap_change_24h + "\nmarket_cap_change_percentage_24h: " + obj.market_cap_change_percentage_24h
                     const updateResult = await updateOrInsert(obj);
-                    if (updateResult[0] > 0) {
+                    if (updateResult && updateResult[0] > 0) {
                         xx = "category: " + obj.category + "\nid: " + "\n*Counter:* " + updateResult[1] + obj.id + "\nlink: " + obj.link + "\nsymbol: " + obj.symbol + "\nname: " + obj.name + "\ncurrent_price: " + obj.current_price;
                     }
                     await sendMessageToGroup(xx);
