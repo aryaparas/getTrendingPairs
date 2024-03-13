@@ -32,7 +32,7 @@ async function updateOrInsert(obj) {
             { $inc: { counter: 1 } } // Increment the counter by 1
         );
 
-        const counter = await DataSchema.find({ id: obj.id, category: obj.category }, { _id: 0, counter: 1 });
+        const counter = await DataSchema.find({ id: obj.id, category: obj.category }, { _id: 0, counter: 1 }).lean();
 
         // If the document was not found (and thus not updated), insert it
         if (updateResult.modifiedCount === 0) {
@@ -44,7 +44,7 @@ async function updateOrInsert(obj) {
                 { upsert: true } // If the document doesn't exist, insert it
             );
         };
-        return [updateResult.modifiedCount, counter];
+        return [updateResult.modifiedCount, counter[0]["counter"]];
     } catch (error) {
         console.log("#38", error)
     }
@@ -82,7 +82,7 @@ export async function cronData() {
                     let xx = "category: " + obj.category + "\n*Counter:* " + obj.counter + "\nid: " + obj.id + "\nlink: " + obj.link + "\nsymbol: " + obj.symbol + "\nname: " + obj.name + "\ncurrent_price: " + obj.current_price + "\nmarket_cap: " + obj.market_cap + "\nfully_diluted_valuation: " + obj.fully_diluted_valuation + "\ntotal_volume: " + obj.total_volume + "\nhigh_24h: " + obj.high_24h + "\nlow_24h: " + obj.low_24h + "\nprice_change_24h: " + obj.price_change_24h + "\nprice_change_percentage_24h: " + obj.price_change_percentage_24h + "\nmarket_cap_change_24h: " + obj.market_cap_change_24h + "\nmarket_cap_change_percentage_24h: " + obj.market_cap_change_percentage_24h
                     const updateResult = await updateOrInsert(obj);
                     if (updateResult && updateResult[0] > 0) {
-                        xx = "category: " + obj.category + "\nid: " + "\n*Counter:* " + updateResult[1] + obj.id + "\nlink: " + obj.link + "\nsymbol: " + obj.symbol + "\nname: " + obj.name + "\ncurrent_price: " + obj.current_price;
+                        xx = "category: " + obj.category + "\nid: " + obj.id + "\n*Counter:* " + updateResult[1] + "\nlink: " + obj.symbol + "\nname: " + obj.name + "\ncurrent_price: " + obj.current_price;
                     }
                     await sendMessageToGroup(xx);
                     await sleep(5000)
